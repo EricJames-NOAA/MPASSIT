@@ -26,7 +26,7 @@ contains
         use program_setup, only: interp_diag, interp_hist, &
                                  wrf_mod_vars, truelat1, truelat2, &
                                  stand_lon, proj_code, map_proj_char, &
-                                 i_target, j_target, dx, &
+                                 i_target, j_target, dxkm, &
                                  ref_lat, ref_lon, pole_lat, &
                                  pole_lon, missing_value
 
@@ -183,10 +183,10 @@ contains
             error = nf90_put_att(ncid, NF90_GLOBAL, 'START_DATE', start_time)
             call netcdf_err(error, 'DEFINING START DATE GLOBAL ATTRIBUTE')
 
-            error = nf90_put_att(ncid, NF90_GLOBAL, 'DX', dx)
+            error = nf90_put_att(ncid, NF90_GLOBAL, 'DX', dxkm)
             call netcdf_err(error, 'DEFINING DX GLOBAL ATTRIBUTE')
 
-            error = nf90_put_att(ncid, NF90_GLOBAL, 'DY', dx)
+            error = nf90_put_att(ncid, NF90_GLOBAL, 'DY', dxkm)
             call netcdf_err(error, 'DEFINING DY GLOBAL ATTRIBUTE')
 
             error = nf90_put_att(ncid, NF90_GLOBAL, 'DT', config_dt)
