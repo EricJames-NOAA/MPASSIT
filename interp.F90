@@ -275,8 +275,8 @@ subroutine fill_missing_field(localpet,in_field,out_field,nd,nx,ny,method, &
         call rotate_winds_cgrid(localpet,2)
      endif
 
-     call fill_missing_bundle(localpet,input_diag_bundle,target_diag_bundle,2,i_target,j_target, &
-                               method,bilinear_regrid,unmapped_ptr_bi)
+     !call fill_missing_bundle(localpet,input_diag_bundle,target_diag_bundle,2,i_target,j_target, &
+     !                          method,bilinear_regrid,unmapped_ptr_bi)
 
   end subroutine interp_diag_data
 
