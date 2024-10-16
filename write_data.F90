@@ -140,6 +140,8 @@ contains
         allocate (dum3d(i_target, j_target, nz_input))
         allocate (dum1d(1))
 
+        if (localpet == 0) print *, "ITARGET,JTARGET,NZINPUT",i_target,j_target,nz_input
+
 !--- open the file
             error = nf90_create_par(output_file, NF90_NETCDF4, &
                                 MPI_COMM_WORLD, &
@@ -1304,6 +1306,7 @@ contains
                 call error_handler("IN FieldGet", error)
 
             if (localpet == 0) print *, "- WRITE TO FILE ", trim(varname)
+            if (localpet == 0) print *,clb(1),cub(1),clb(2),cub(2)
             dum2d(:, :) = dum2dptr(clb(1):cub(1),clb(2):cub(2))
             error = nf90_put_var(ncid, id_vars2(i), dum2d, start = (/clb(1),clb(2),1/),  &
                                    count=(/count1, count2, 1/))
@@ -1314,6 +1317,8 @@ contains
 
         !    3d fields from diaglist
 
+!        if (allocated(dum3d)) deallocate(dum3d)
+!        allocate(dum3d(clb(1):cub(1),clb(2):cub(2),nz_input))
         if (n3d > 0) then
             print *, "Loop writing over ", n3d, "3-d nz vars"
             do i = 1, n3d
@@ -1323,10 +1328,17 @@ contains
                 call ESMF_FieldGet(field_extra3(i), farrayPtr = dum3dptr, rc=error)
                 if (ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__, file=__FILE__)) &
                     call error_handler("IN FieldGet", error)                
-
+            !if (localpet == 0) print *,clb(1),cub(1),clb(2),cub(2)
+            if (localpet == 0) print *,shape(dum3d)
+            if (localpet == 0) print *,shape(dum3dptr)
+            if (localpet == 0) print *,clb(1)
+            if (localpet == 0) print *,cub(1)
+            if (localpet == 0) print *,clb(2)
+            if (localpet == 0) print *,cub(2)
                 dum3d(:,:,:) = dum3dptr(clb(1):cub(1),clb(2):cub(2),:)
+                !dum3d(:,:,:) = dum3dptr(1:1799,clb(2):cub(2),:)
                 if (localpet == 0) print *, trim(varname), minval(dum3d), maxval(dum3d)
-                 error = nf90_put_var(ncid, id_vars3_nz(i), dum3d, start = (/clb(1),clb(2),1,1/), &
+                 error = nf90_put_var(ncid, id_vars3_nz(i), dum3d, start = (/1,1,1,1/), &
                                 count=(/count1,count2, nz_input, 1/))
                  call netcdf_err(error, 'WRITING RECORD')
             end do
@@ -1408,6 +1420,13 @@ contains
                     end do
                     end do
                 else
+                   !if (localpet == 0) print *,clb(1),cub(1),clb(2),cub(2)
+                   if (localpet == 0) print *,shape(dum3d)
+                   if (localpet == 0) print *,shape(dum3dptr)
+                   if (localpet == 0) print *,clb(1)
+                   if (localpet == 0) print *,cub(1)
+                   if (localpet == 0) print *,clb(2)
+                   if (localpet == 0) print *,cub(2)
                    dum3d(:,:,:) = dum3dptr(clb(1):cub(1),clb(2):cub(2),:)
                 end if
                 if (localpet==0) print *, trim(varname), minval(dum3d), maxval(dum3d)
