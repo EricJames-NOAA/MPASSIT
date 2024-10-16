@@ -188,6 +188,18 @@
    do ij = l(1), u(1)
         call ij_to_i_j(unmapped_ptr(ij), nx, ny, i, j)
         do k = 1, num_fields
+           call ESMF_FieldBundleGet(out_bundle,k,field,rc=rc)
+            if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+              call error_handler("IN FieldBundleGet", rc)
+           call ESMF_FieldGet(field,name=fname,rc=rc)
+            if(ESMF_logFoundError(rcToCheck=rc,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__))&
+              call error_handler("IN FieldGet", rc)
+           if (fname=="REFL_10CM") then
+              ndims = 3
+           else
+              ndims = nd
+           endif
+           if(localpet==0) print*, k, ndims
            if (ndims==2) fptr2(k)%p(i,j) = missing_value
            if (ndims==3) fptr3(k)%p(i,j,:) = missing_value 
         enddo
