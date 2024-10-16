@@ -140,8 +140,6 @@ contains
         allocate (dum3d(i_target, j_target, nz_input))
         allocate (dum1d(1))
 
-        if (localpet == 0) print *, "ITARGET,JTARGET,NZINPUT",i_target,j_target,nz_input
-
 !--- open the file
             error = nf90_create_par(output_file, NF90_NETCDF4, &
                                 MPI_COMM_WORLD, &
@@ -582,11 +580,9 @@ contains
                 call error_handler("IN FieldBundleGet", error)
             do i = 1, n_diag_fields
                 call ESMF_FieldGet(fields(i), name=varname, rc=error)
-                if (localpet == 0) print *, varname
                 if (ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__, file=__FILE__)) &
                     call error_handler("IN FieldGet", error)
                 call ESMF_FieldGet(fields(i), dimCount=ndims, rc=rc)
-                if (localpet == 0) print *, ndims
                 if (ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__, file=__FILE__)) &
                     call error_handler("IN FieldGet", error)
 
@@ -595,13 +591,6 @@ contains
                     field_write_2d(k) = fields(i)
                      if (localpet == 0) print *, "- DEFINE 2d diag ON FILE TARGET GRID ", varname
                      error = nf90_def_var(ncid, varname, NF90_FLOAT, (/dim_lon, dim_lat, dim_time/), id_vars2(k))
-                     if (localpet == 0) print *, dim_lon
-                     if (localpet == 0) print *, dim_lat
-                     if (localpet == 0) print *, dim_time
-                     if (localpet == 0) print *, id_vars2(k)
-                     if (localpet == 0) print *, k
-                     if (localpet == 0) print *, target_diag_units(i)
-                     if (localpet == 0) print *, target_diag_longname(i)
                      call netcdf_err(error, 'DEFINING VAR')
                      error = nf90_put_att(ncid, id_vars2(k), "MemoryOrder", "XY ")
                      call netcdf_err(error, 'DEFINING MEMORYORDER')
@@ -624,14 +613,6 @@ contains
                     field_extra3(m) = fields(i)
                      if (localpet == 0) print *, "- DEFINE 3d diag ON FILE TARGET GRID ", varname
                      error = nf90_def_var(ncid, varname, NF90_FLOAT, (/dim_lon, dim_lat, dim_z, dim_time/), id_vars3_nz(m))
-                     if (localpet == 0) print *, dim_lon
-                     if (localpet == 0) print *, dim_lat
-                     if (localpet == 0) print *, dim_z
-                     if (localpet == 0) print *, dim_time
-                     if (localpet == 0) print *, id_vars3_nz(m)
-                     if (localpet == 0) print *, m
-                     if (localpet == 0) print *, target_diag_units(i)
-                     if (localpet == 0) print *, target_diag_longname(i)
                      call netcdf_err(error, 'DEFINING VAR')
                      error = nf90_put_att(ncid, id_vars3_nz(m), "MemoryOrder", "XYZ ")
                      call netcdf_err(error, 'DEFINING MEMORYORDER')
@@ -781,14 +762,6 @@ contains
                         call error_handler("IN FieldGet", error)
                     if (localpet == 0) print *, "- DEFINE ON FILE TARGET GRID ", varname
                     error = nf90_def_var(ncid, varname, NF90_FLOAT, (/dim_lon, dim_lat, dim_soil, dim_time/), id_vars_soil(i))
-                    if (localpet == 0) print *, dim_lon
-                    if (localpet == 0) print *, dim_lat
-                    if (localpet == 0) print *, dim_soil
-                    if (localpet == 0) print *, dim_time
-                    if (localpet == 0) print *, id_vars_soil(i)
-                    if (localpet == 0) print *, i
-                    if (localpet == 0) print *, target_hist_units_soil(i)
-                    if (localpet == 0) print *, target_hist_longname_soil(i)
                     call netcdf_err(error, 'DEFINING VAR')
                     error = nf90_put_att(ncid, id_vars_soil(i), "MemoryOrder", "XYZ ")
                     call netcdf_err(error, 'DEFINING MEMORYORDER')
@@ -824,14 +797,6 @@ contains
                         call error_handler("IN FieldGet", error)
                     if (localpet == 0) print *, "- DEFINE ON FILE TARGET GRID ", varname
                     error = nf90_def_var(ncid, varname, NF90_FLOAT, (/dim_lon, dim_lat, dim_z, dim_time/), id_vars3_nz(i + n3d))
-                     if (localpet == 0) print *, dim_lon
-                     if (localpet == 0) print *, dim_lat
-                     if (localpet == 0) print *, dim_z
-                     if (localpet == 0) print *, dim_time
-                     if (localpet == 0) print *, id_vars3_nz(i+n3d)
-                     if (localpet == 0) print *, i+n3d
-                     if (localpet == 0) print *, target_hist_units_3d_nz(i)
-                     if (localpet == 0) print *, target_hist_longname_3d_nz(i)
                     call netcdf_err(error, 'DEFINING VAR')
                     error = nf90_put_att(ncid, id_vars3_nz(i + n3d), "MemoryOrder", "XYZ ")
                     call netcdf_err(error, 'DEFINING MEMORYORDER')
@@ -1339,7 +1304,6 @@ contains
                 call error_handler("IN FieldGet", error)
 
             if (localpet == 0) print *, "- WRITE TO FILE ", trim(varname)
-            if (localpet == 0) print *,clb(1),cub(1),clb(2),cub(2)
             dum2d(:, :) = dum2dptr(clb(1):cub(1),clb(2):cub(2))
             error = nf90_put_var(ncid, id_vars2(i), dum2d, start = (/clb(1),clb(2),1/),  &
                                    count=(/count1, count2, 1/))
@@ -1361,15 +1325,7 @@ contains
                 call ESMF_FieldGet(field_extra3(i), farrayPtr = dum3dptr, rc=error)
                 if (ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__, file=__FILE__)) &
                     call error_handler("IN FieldGet", error)                
-            !if (localpet == 0) print *,clb(1),cub(1),clb(2),cub(2)
-            if (localpet == 0) print *,shape(dum3d)
-            if (localpet == 0) print *,shape(dum3dptr)
-            if (localpet == 0) print *,clb(1)
-            if (localpet == 0) print *,cub(1)
-            if (localpet == 0) print *,clb(2)
-            if (localpet == 0) print *,cub(2)
                 dum3d(:,:,:) = dum3dptr(clb(1):cub(1),clb(2):cub(2),:)
-                !dum3d(:,:,:) = dum3dptr(1:1799,clb(2):cub(2),:)
                 if (localpet == 0) print *, trim(varname), minval(dum3d), maxval(dum3d)
                  error = nf90_put_var(ncid, id_vars3_nz(i), dum3d, start = (/clb(1),clb(2),1,1/), &
                                 count=(/count1,count2, nz_input, 1/))
@@ -1453,13 +1409,6 @@ contains
                     end do
                     end do
                 else
-                   !if (localpet == 0) print *,clb(1),cub(1),clb(2),cub(2)
-                   if (localpet == 0) print *,shape(dum3d)
-                   if (localpet == 0) print *,shape(dum3dptr)
-                   if (localpet == 0) print *,clb(1)
-                   if (localpet == 0) print *,cub(1)
-                   if (localpet == 0) print *,clb(2)
-                   if (localpet == 0) print *,cub(2)
                    dum3d(:,:,:) = dum3dptr(clb(1):cub(1),clb(2):cub(2),:)
                 end if
                 if (localpet==0) print *, trim(varname), minval(dum3d), maxval(dum3d)
