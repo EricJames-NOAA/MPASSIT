@@ -1324,7 +1324,8 @@ contains
                     call error_handler("IN FieldGet", error)
                 call ESMF_FieldGet(field_extra3(i), farrayPtr = dum3dptr, rc=error)
                 if (ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__, file=__FILE__)) &
-                    call error_handler("IN FieldGet", error)                
+                    call error_handler("IN FieldGet", error)
+            
                 dum3d(:,:,:) = dum3dptr(clb(1):cub(1),clb(2):cub(2),:)
                 if (localpet == 0) print *, trim(varname), minval(dum3d), maxval(dum3d)
                  error = nf90_put_var(ncid, id_vars3_nz(i), dum3d, start = (/clb(1),clb(2),1,1/), &
