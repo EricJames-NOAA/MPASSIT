@@ -27,7 +27,7 @@ if [[ -d /lfs5 || -d /lfs6 ]] ; then
     fi
     target=jet
     module purge
-elif [[ -d /scratch1 ]] ; then
+elif [[ -d /scratch1 || -d /scratch2 ]] ; then
     # We are on NOAA Hera
     if ( ! eval module help > /dev/null 2>&1 ) ; then
         echo load the module command 1>&2
@@ -35,6 +35,13 @@ elif [[ -d /scratch1 ]] ; then
     fi
     target=hera
     module purge
+elif [[ -d /scratch3 || -d /scratch4 ]] ; then
+    # We are on NOAA Ursa
+    if ( ! eval module help > /dev/null 2>&1 ) ; then
+	echo load the module command 1>&2
+	source /apps/lmod/lmod/init/$__ms_shell
+    fi
+    target=ursa
 elif [[ -d /gpfs/hps && -e /etc/SuSE-release ]] ; then
     # We are on NOAA Luna or Surge
     if ( ! eval module help > /dev/null 2>&1 ) ; then

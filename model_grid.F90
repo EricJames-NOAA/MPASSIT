@@ -665,7 +665,7 @@ enddo
 
  integer                      :: error, extra, i, j, clb(2), cub(2)
 
- real(esmf_kind_r8), allocatable       :: latitude_one(:,:), longitude_one(:,:), &
+ real, allocatable       :: latitude_one(:,:), longitude_one(:,:), &
                                           latitude_corner_one(:,:), &
                                           longitude_corner_one(:,:), &
                                           longitude_u_one(:,:), latitude_u_one(:,:), &
@@ -1918,7 +1918,7 @@ if (localpet==0) print*,"- CALL FieldCreate FOR TARGET GRID LATITUDE."
   real(esmf_kind_r8), intent(inout), pointer   :: latitude_sw(:,:)
   real(esmf_kind_r8), intent(in),pointer    :: longitude(:,:)
   real(esmf_kind_r8), intent(inout), pointer   :: longitude_sw(:,:)
-  real(esmf_kind_r8), intent(in)    :: dx !grid cell side size (m)
+  real, intent(in)    :: dx !grid cell side size (m)
 
   integer, intent(in) :: clb(2), cub(2)
 
@@ -2466,8 +2466,8 @@ end subroutine unique_sort
 
      ! Arguments
       integer, intent(in) :: start_mem_i, start_mem_j, end_mem_i, end_mem_j
-      real(esmf_kind_r8), dimension(start_mem_i:end_mem_i, start_mem_j:end_mem_j), intent(in) :: xlat_arr, xlon_arr
-      real, pointer, dimension(:,:), intent(inout) :: cosa, sina
+      real, dimension(start_mem_i:end_mem_i, start_mem_j:end_mem_j), intent(in) :: xlat_arr, xlon_arr
+      real(esmf_kind_r8), pointer, dimension(:,:), intent(inout) :: cosa, sina
       ! Local variables
       integer :: i, j
       real :: alpha, d_lon

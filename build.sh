@@ -42,6 +42,9 @@ elif [[ "$compiler" == "intel" ]]; then
     CMAKE_FLAGS="${CMAKE_FLAGS} -DCMAKE_C_COMPILER=icc -DCMAKE_CXX_COMPILER=icpc -DCMAKE_Fortran_COMPILER=ifort"
 elif [[ "$compiler" == "gnu" ]]; then
     CMAKE_FLAGS="${CMAKE_FLAGS} -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_Fortran_COMPILER=gfortran"
+elif [[ "$compiler" == "intel-llvm" ]]; then
+    CMAKE_FLAGS="${CMAKE_FLAGS} -DCMAKE_C_COMPILER=icx -DCMAKE_CXX_COMPILER=icpx -DCMAKE_Fortran_COMPILER=ifx"
+
 fi
 export debug=true
 if [[ "${debug}" == "true" ]]; then
