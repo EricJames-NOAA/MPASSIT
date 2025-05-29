@@ -527,20 +527,13 @@ subroutine fill_missing_field(localpet,in_field,out_field,nd,nx,ny,method, &
         if(ESMF_logFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__,file=__FILE__)) &
           call error_handler("IN FieldRegridStore", rc)
 
-       if (localpet==0) print*, "- MADE IT THROUGH ESMF_FIELDREGRIDSTORE"
-
        call ESMF_FieldRegrid(v_target_grid_nostag,v_target_grid, rh_patch, rc=rc)
         if(ESMF_logFoundError(rcToCheck=rc, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__,file=__FILE__)) &
          call error_handler("IN FieldRegrid", rc)
- 
-       if (localpet==0) print*, "- MADE IT THROUGH ESMF FIELDREGRID"
-
-       
 
 !       call fill_missing_field(localpet,v_input_grid, v_target_grid,3,i_target, j_target+1, &
 !                            method,v_regrid,unmapped_ptr_v)
 
-       if (localpet==0) print*, "- MADE IT THROUGH FILL MISSING FIELD"
     endif
 
 
