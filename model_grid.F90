@@ -668,14 +668,14 @@ enddo
             periodicDim=1, &
             poleDim=2,  &
             coordSys=ESMF_COORDSYS_SPH_DEG, &
-            regDecomp=(/1,npets/),  &
+            regDecomp=(/8,256/),  &
             indexflag=ESMF_INDEX_GLOBAL, rc=error)
      if(ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__,file=__FILE__)) &
        call error_handler("IN GridCreate1PeriDim", error)
  else
      if (localpet==0) print*,"- CALL GridCreateNoPeriDim FOR TARGET MODEL GRID"
      target_grid = ESMF_GridCreateNoPeriDim(maxIndex=(/i_target,j_target/), &
-               indexflag=ESMF_INDEX_GLOBAL, &
+               regDecomp=(/8,256/),indexflag=ESMF_INDEX_GLOBAL, &
                rc=error)
      if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
         call error_handler("IN GridCreateNoPeriDim", error)
@@ -1279,7 +1279,7 @@ if (localpet==0) print*,"- CALL FieldCreate FOR TARGET GRID mapfac_m."
 
  if (localpet==0) print*,"- CALL GridCreateNoPeriDim FOR TARGET MODEL GRID"
  target_grid = ESMF_GridCreateNoPeriDim(maxIndex=(/i_target,j_target/), &
-                                       indexflag=ESMF_INDEX_GLOBAL, &
+                                       regDecomp=(/8,256/),indexflag=ESMF_INDEX_GLOBAL, &
                                        rc=error)
  if(ESMF_logFoundError(rcToCheck=error,msg=ESMF_LOGERR_PASSTHRU,line=__LINE__,file=__FILE__)) &
     call error_handler("IN GridCreateNoPeriDim", error)
