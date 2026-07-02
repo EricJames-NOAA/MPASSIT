@@ -668,7 +668,7 @@ enddo
             periodicDim=1, &
             poleDim=2,  &
             coordSys=ESMF_COORDSYS_SPH_DEG, &
-            regDecomp=(/8,256/),  &
+            regDecomp=(/1,npets/),  &
             indexflag=ESMF_INDEX_GLOBAL, rc=error)
      if(ESMF_logFoundError(rcToCheck=error, msg=ESMF_LOGERR_PASSTHRU, line=__LINE__,file=__FILE__)) &
        call error_handler("IN GridCreate1PeriDim", error)
